@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
 public class Main3Activity extends AppCompatActivity {
     /* Hint:
         1. This displays the available levels from 1 to 10 to the user.
@@ -27,6 +29,11 @@ public class Main3Activity extends AppCompatActivity {
      */
     private static final String FILENAME = "Main3Activity.java";
     private static final String TAG = "Whack-A-Mole3.0!";
+    private Button backLoginButton;
+    RecyclerView recyclerView;
+    CustomScoreAdaptor customScoreAdaptor;
+    MyDBHandler myDBHandler = new MyDBHandler(this, null, null, 1);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +45,26 @@ public class Main3Activity extends AppCompatActivity {
 
         Log.v(TAG, FILENAME + ": Show level for User: "+ userName);
          */
+        backLoginButton = findViewById(R.id.buttonBackLogin);
+
+        Intent receivingEnd = getIntent();
+        String username = receivingEnd.getStringExtra("sendUsername");
+        UserData userData = myDBHandler.findUser(username);
+        Log.v(TAG,FILENAME + "sdfsd" + userData.getMyUserName());
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        customScoreAdaptor = new CustomScoreAdaptor(userData);
+        recyclerView.setAdapter(customScoreAdaptor);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        backLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Main3Activity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override

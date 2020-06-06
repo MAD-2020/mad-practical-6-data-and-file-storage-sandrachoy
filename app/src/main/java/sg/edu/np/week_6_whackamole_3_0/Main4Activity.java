@@ -36,7 +36,6 @@ public class Main4Activity extends AppCompatActivity {
     private static final String FILENAME = "Main4Activity.java";
     private static final String TAG = "Whack-A-Mole3.0!";
     CountDownTimer readyTimer;
-    CountDownTimer newMolePlaceTimer;
     CountDownTimer moleCountDown;
     CountDownTimer moleTimer;
     private List<Button> buttonList = new ArrayList<>();
@@ -85,7 +84,9 @@ public class Main4Activity extends AppCompatActivity {
            belongs here.
            This is an infinite countdown timer.
          */
-        moleTimer = new CountDownTimer(1000,1000){
+        int msTime = (11 - level) * 1000;
+
+        moleTimer = new CountDownTimer(msTime,msTime){
             @Override
             public void onTick(long millisUntilFinished) {
 
@@ -122,6 +123,11 @@ public class Main4Activity extends AppCompatActivity {
             if the back button is selected.
          */
         scoring = (TextView) findViewById(R.id.textViewScore);
+        score = 0;
+        scoring.setText(String.valueOf(score));
+        Intent receivingEnd = getIntent();
+        level = receivingEnd.getIntExtra("sendLevel",0);
+        username = receivingEnd.getStringExtra("sendUsername");
         backButton = findViewById(R.id.buttonBack);
 
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +135,7 @@ public class Main4Activity extends AppCompatActivity {
             public void onClick(View v) {
                 updateUserScore();
                 Intent intent = new Intent(Main4Activity.this, Main3Activity.class);
+                intent.putExtra("Username", username);
                 startActivity(intent);
             }
         });
@@ -148,7 +155,7 @@ public class Main4Activity extends AppCompatActivity {
             });
             buttonList.add(buttonListener);
         }
-        readyTimer();
+        //readyTimer();
     }
     @Override
     protected void onStart(){
@@ -189,7 +196,14 @@ public class Main4Activity extends AppCompatActivity {
         int randomLocation = ran.nextInt(9);
         int randomLocation2 = ran.nextInt(9);
         getRandomLocation = buttonList.get(randomLocation);
-        getRandomLocation.setText("*");
+        getRandomLocation2 = buttonList.get(randomLocation2);
+        if (level <= 5){
+            getRandomLocation.setText("*");
+        }
+        else{
+            getRandomLocation.setText("*");
+            getRandomLocation2.setText("*");
+        }
     }
 
     public void reset(){
@@ -204,10 +218,20 @@ public class Main4Activity extends AppCompatActivity {
         This updates the user score to the database if needed. Also stops the timers.
         Log.v(TAG, FILENAME + ": Update User Score...");
       */
-        newMolePlaceTimer.cancel();
-        readyTimer.cancel();
-
+        if (readyTimer != null){
+            readyTimer.cancel();
+        }
+        if (moleTimer != null){
+            moleTimer.cancel();
+        }
         UserData userData = myDBHandler.findUser(username);
+        int levels = userData.getLevels().indexOf(level);
+        int scores = userData.getScores().get(levels);
+        if (scores < score){
+            userData.getScores().set(levels,score);
+            myDBHandler.deleteAccount(username);
+            myDBHandler.addUser(userData);
+        }
     }
 
 }

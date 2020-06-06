@@ -50,7 +50,6 @@ public class Main3Activity extends AppCompatActivity {
         Intent receivingEnd = getIntent();
         String username = receivingEnd.getStringExtra("sendUsername");
         UserData userData = myDBHandler.findUser(username);
-        Log.v(TAG,FILENAME + "sdfsd" + userData.getMyUserName());
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         customScoreAdaptor = new CustomScoreAdaptor(userData);

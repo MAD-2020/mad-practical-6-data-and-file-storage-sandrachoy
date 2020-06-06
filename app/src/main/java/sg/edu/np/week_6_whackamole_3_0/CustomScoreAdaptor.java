@@ -27,7 +27,7 @@ public class CustomScoreAdaptor extends RecyclerView.Adapter<CustomScoreViewHold
         /* Hint:
         This method takes in the data and readies it for processing.
          */
-        userdata = userData;
+        userData = userdata;
         levelList = userdata.getLevels();
         scoreList = userdata.getScores();
 

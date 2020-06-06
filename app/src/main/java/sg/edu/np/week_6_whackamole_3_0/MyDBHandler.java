@@ -146,6 +146,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 scoreList.add(cursor.getInt(3));
             }
             while (cursor.moveToNext());
+            queryData.setLevels(levelList);
+            queryData.setScores(scoreList);
             Log.v(TAG, FILENAME + ": QueryData: " + queryData.getLevels().toString() + queryData.getScores().toString());
             cursor.close();
         }
@@ -171,6 +173,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
 
         UserData delData = new UserData();
+        ArrayList<Integer> levelList = new ArrayList<>();
+        ArrayList<Integer> scoreList = new ArrayList<>();
 
         if (cursor.moveToFirst()){
             do {

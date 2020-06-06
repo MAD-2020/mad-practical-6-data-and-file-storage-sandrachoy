@@ -135,7 +135,7 @@ public class Main4Activity extends AppCompatActivity {
             public void onClick(View v) {
                 updateUserScore();
                 Intent intent = new Intent(Main4Activity.this, Main3Activity.class);
-                intent.putExtra("Username", username);
+                intent.putExtra("sendUsername", username);
                 startActivity(intent);
             }
         });
@@ -218,8 +218,8 @@ public class Main4Activity extends AppCompatActivity {
         This updates the user score to the database if needed. Also stops the timers.
         Log.v(TAG, FILENAME + ": Update User Score...");
       */
-        if (readyTimer != null){
-            readyTimer.cancel();
+        if (moleCountDown != null){
+            moleCountDown.cancel();
         }
         if (moleTimer != null){
             moleTimer.cancel();
@@ -228,6 +228,7 @@ public class Main4Activity extends AppCompatActivity {
         int levels = userData.getLevels().indexOf(level);
         int scores = userData.getScores().get(levels);
         if (scores < score){
+            Log.v(TAG, FILENAME + ": Update User Score...");
             userData.getScores().set(levels,score);
             myDBHandler.deleteAccount(username);
             myDBHandler.addUser(userData);

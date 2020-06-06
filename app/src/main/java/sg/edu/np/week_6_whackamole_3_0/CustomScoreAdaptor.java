@@ -54,13 +54,14 @@ public class CustomScoreAdaptor extends RecyclerView.Adapter<CustomScoreViewHold
         final Integer score = scoreList.get(position);
         holder.txtSelectLevel.setText("Level " + level);
         holder.txtHighestScore.setText("Highest Score: " + score);
-
+        Log.v(TAG, FILENAME + " Showing level " + levelList.get(position) + " with highest score: " + scoreList.get(position));
         holder.txtSelectLevel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), Main4Activity.class);
                 intent.putExtra("sendUsername", userData.getMyUserName());
                 intent.putExtra("sendLevel", levelList.get(position));
+                Log.v(TAG, FILENAME+ ": Load level " + position +" for: " + userData.getMyUserName());
                 v.getContext().startActivity(intent);
             }
         });
